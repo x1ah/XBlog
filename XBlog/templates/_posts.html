@@ -1,0 +1,22 @@
+<ul class="posts">
+    {% for post in posts %}
+    <div class="jumbotron modal-content" style="width: 100%">
+        <center><h1>{{ post.title }}</h1></center>
+        <p class="text-muted">{{ post.timestamp.strftime(format="%Y-%m-%d") }}</p>
+        {% for category in Category.query.filter_by(posts=post.id) %}
+        <p><a href="{{ url_for('main.category', categy=category.category_name) }}" style="color: #337ab7;float:left">
+            <span class="label label-success">{{ category.category_name }}</span>
+        </a></p>
+        {% endfor %}
+        <div class="post-body">
+          {% if post.body_html %}
+          {{ post.body_html | safe }}
+          {% else %}
+          {{ post.body }}
+          {% endif %}
+        </div>
+
+    <p><a href="{{ url_for('main.edit', pid=post.id) }}" class="btn btn-danger read-more">编辑</a></p>
+    </div>
+    {% endfor %}
+</ul>

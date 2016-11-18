@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block navbar %}
+{%  if "Mobile" not in request.headers["User-Agent"] %}
+    <div class="navbar navbar-default" id="top">
+    <p class="nav nav-p"><a href="/">x1ah</a></p>
+    <p class="nav nav-p-f"><a href="/about">Live free or die!<br/>Keep it Simple, Stupid!</a></p>
+      <div class="bgbg-sun"></div>
+      <div class="bgbg-house"></div>
+      <ul class="nav nav-tabs">
+      <li {% if show == "index" %}  class="active" {% endif %}><a href="/">Home</a></li>
+      <li {% if show == "life" %} class="active" {% endif %}><a href="/life">Life</a></li>
+      <li><a href="/about">About</a></li>
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          More<span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            {% if current_user.email %}
+            <li><a href="/logout">Log Out</a></li>
+            {% else %}
+          <li><a href="/login">Log In</a></li>
+            {% endif %}
+          <li class="divider"></li>
+          <li><a href="/new">写作</a></li>
+        <li class="divider"></li>
+          <li><a href="#dropdown2">留言板</a></li>
+          <li class="divider"></li>
+          <li><a href="http://github.com/x1ah">Fork me on GitHub</a></li>
+        </ul>
+      </li>
+      </ul>
+</div>
+    {% else %}
+    <nav class="navbar navbar-default" id="top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/" style="font-family: Microsoft Consolas;">x1ah</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="/">Home<span class="sr-only">(current)</span></a></li>
+        <li><a href="/about">Life</a></li>
+        <li class="active"><a href="/about">About</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">更多<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+              {% if current_user.email %}
+              <li><a href="/logout">Log Out</a></li>
+              {% else %}
+            <li><a href="/login">Log In</a></li>
+              {% endif %}
+            <li class="divider"></li>
+          <li><a href="/new">写作</a></li>
+            <li class="divider"></li>
+            <li><a href="/">留言板</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Fork me on GitHub</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+{% endif %}
+{% endblock %}
+
+{% block tags %}
+{%  if "Mobile" not in request.headers["User-Agent"] %}
+<div class="sdefdiv jumbotron modal-content" style="width: 17%; position: absolute;top:40%;right: 15%">
+        <ul class="list-group">
+            <h3><span class="glyphicon glyphicon-tags"> Tags</span></h3>
+            {% for category in categories %}
+            <li class="list-group-item">
+            <span class="badge">{{ categories[category] }}</span>
+            <a href="{{ url_for('main.category', categy=category) }}" style="color: #337ab7">{{ category }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    {% for post in posts %}<a href="{{ url_for('main.post', pid=post.id) }}" style="color: inherit">
+    <div class="jumbotron modal-content">
+        <h1><center>{{ post.title }}</center></h1>
+        <center><span class="glyphicon glyphicon-calendar">{{ post.timestamp.strftime(format="%Y-%m-%d") }}</span></center>
+        {% if post.about_this_article_html %}
+        {{ post.about_this_article_html | safe }}
+        {% else %}
+        {{ post.about_this_article }}
+        {% endif %}
+        <span class="glyphicon glyphicon-send" style="float: left"></span>
+        {% for category in Category.query.filter_by(posts=post.id).all() %}
+        <p><a href="{{ url_for('main.category', categy=category.category_name) }}" style="color: #337ab7;float:left">
+            <span class="label label-success">{{ category.category_name }}</span>
+        </a></p>
+        {% endfor %}
+        {% if current_user.email %}
+        <p><a href="{{ url_for('main.edit', pid=post.id) }}" class="btn btn-danger read-more">编辑</a></p>
+        <p><a href="{{ url_for('main.delete', pid=post.id) }}" class="btn btn-danger read-more">删除</a></p>
+        {% endif %}
+        <p><a href="{{ url_for('main.post', pid=post.id) }}" class="btn btn-danger read-more">阅读全文</a></p>
+    </div>
+    </a>
+    {% endfor %}
+   <div class="pagination">
+        {{ macros.pagination_widget(pagination, "main.index") }}
+    </div>
+</div>
+{% endblock %}

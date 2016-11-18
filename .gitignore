@@ -1,2 +1,6 @@
 *~
 *.out
+config.py
+*.sqlite
+*.sqlite3
+migrations/
