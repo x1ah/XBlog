@@ -1,5 +1,6 @@
 *~
 *.out
+*.pyc
 config.py
 *.sqlite
 *.sqlite3

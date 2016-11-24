@@ -1,0 +1,24 @@
+{% for post in lifes %}
+  <div class="col s12 m12">
+    <div class="card blue-grey darken-1">
+      <div class="card-content white-text">
+        <span class="card-title">{{ post.title }}</span>
+        <i class="small material-icons today"></i>
+        {% if post.about_this_article_html %}
+        <p>{{ post.about_this_article_html | safe }}</p>
+        {% else %}
+        {{ post.about_this_article }}
+        {% endif %}
+      </div>
+    </div>
+ <a class='dropdown-button btn' href='#' data-activates='dropdown1'>Tags</a>
+
+  <!-- Dropdown Structure -->
+  <ul id='dropdown1' class='dropdown-content'>
+    {% for category in Category.query.filter_by(posts=post.id).all() %}
+    <li><a href="{{ url_for('main.category', categy=category.category_name) }}">{{ category.category_name }}</a></li>
+    <li class="divider"></li>
+    {% endfor %}
+  </ul>
+  </div>
+{% endfor %}

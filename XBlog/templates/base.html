@@ -1,4 +1,4 @@
-{% extends "bootstrap/base.html" %}
+{% extends "material/base.html" %}
 
 {% block title %} x1ah's blog {% endblock %}
 
@@ -6,85 +6,104 @@
 {{ super() }}
     <link rel="shortcut icon" href="{{ url_for("static", filename="favicon.ico") }}" type="image/x-icon">
     <link rel="icon" href="{{ url_for("static", filename="favicon.ico") }}" type="image/x-icon">
-    <link rel="stylesheet" href="{{ url_for("static", filename="bootstrap.css") }}" type="text/css">
-    <meta name="viewport" content="width=device-width, height=device-height">
+    <link rel="stylesheet" type="text/css" href="{{ url_for("static", filename="css/materialize.min.css") }}" media="screen,projection"/>
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script>
+        function side()
+        {
+            $(".button-collapse").sideNav();
+        }
+    </script>
+{% endblock %}
+
+{% block body_attribs %}
+    onload="side();"
 {% endblock %}
 
 {% block navbar %}
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/" style="font-family: serif">x1ah</a>
-    </div>
+<nav class="nav-extended">
+<div class="nav-wrapper #616161 grey darken-2">
+    <a href="/" class="brand-logo">x1ah</a>
+    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+    <li><a href="https://github.com/x1ah/XBlog">Fork me on GitHub</a></li>
+    <li><a href="#">留言板</a></li>
+    {% if current_user.email %}
+    <li><a href="/new">Write</a></li>
+    <li><a href="/logout">Log Out</a></li>
+    {% else %}
+    <li><a href="/login">Log In</a></li>
+    {% endif %}
+    </ul>
+    <ul class="side-nav" id="mobile-demo">
+    <li><a href="https://github.com/x1ah/XBlog">Fork me on GitHub</a></li>
+    <li><a href="#">留言板</a></li>
+    {% if current_user.email %}
+    <li><a href="/new">Write</a></li>
+    <li><a href="/logout">Log Out</a></li>
+    {% else %}
+    <li><a href="/login">Log In</a></li>
+    {% endif %}
+    </ul>
 
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li><a href="/">Home<span class="sr-only">(current)</span></a></li>
-        <li><a href="/about">Life</a></li>
-        <li class="active"><a href="/about">About</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">更多<span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-              {% if current_user.email %}
-              <li><a href="/logout">Log Out</a></li>
-              {% else %}
-            <li><a href="/login">Log In</a></li>
-              {% endif %}
-            <li class="divider"></li>
-            <li><a href="/new">写作</a></li>
-            <li class="divider"></li>
-            <li><a href="/">留言板</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Fork me on GitHub</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
+    <ul class="tabs tabs-transparent">
+        <li class="tab"><a {% block home_active %}{% endblock %} onclick="javascript:location.href='/'">Home</a></li>
+        <li class="tab"><a {% block life_active %}{% endblock %} onclick="javascript:location.href='/life'">Life</a></li>
+        <li class="tab"><a {% block about_active %}{% endblock %} onclick="javascript:location.href='/about'">About</a></li>
+        <li class="tab"><a {% block tools_active %}{% endblock %} onclick="javascript:location.href='/tools'">Tools</a></li>
+    </ul>
+</div>
 </nav>
 {% endblock %}
 
+
 {% block content %}
+ <div class="fixed-action-btn horizontal click-to-toggle">
+    <a class="btn-floating btn-large red">
+      <i class="material-icons">menu</i>
+    </a>
+    <ul>
+      <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
+      <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+      <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+      <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+      <li>
+          <a class="waves-effect waves-light btn" href="#modal1">tags</a>
+      </li>
+
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal bottom-sheet">
+    <div class="modal-content">
+        test
+    </div>
+  </div>
+    </ul>
+  </div>
+
 <div class="container">
     {% for message in get_flashed_messages() %}
-    <div class="alert alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <script>
+        $(document).ready(function(){
+            $('.tooltipped').tooltip({delay: 50});
+          });
+        Materialize.toast('{{ message }}', 3000, 'rounded');
+         Materialize.toast('I am a toast!', 4000);
+    </script>
+    <div class="chip">
         {{ message }}
+        <i class="close material-icons">close</i>
     </div>
     {% endfor %}
     {% block page_content %}{% endblock %}
     {% block tags %}{% endblock %}
 </div>
-<div class="footer">
-    test footer
-    <div style="margin-top:-23px"><a href="#top">
-        <span class="glyphicon glyphicon-tree-conifer" style="">
-            TOP
-        </span>
-    </div>
-</div>
 {% endblock %}
 
 {% block scripts %}
-    <script type="text/javascript">
-        var cssEl = document.createElement('style');
-        document.documentElement.firstElementChild.appendChild(cssEl);
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
 
-        function setPxPerRem(){
-            var dpr = 1;
-            //把viewport分成10份的rem，html标签的font-size设置为1rem的大小;
-            var pxPerRem = document.documentElement.clientWidth * dpr / 10;
-            cssEl.innerHTML = 'html{font-size:' + pxPerRem + 'px!important;}';
-        }
-        setPxPerRem();
-    </script>
-    {{ super() }}
     {{ moment.include_moment() }}
     {{ moment.lang("zh-CN")}}
 {% endblock %}

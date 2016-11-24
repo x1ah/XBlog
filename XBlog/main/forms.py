@@ -25,7 +25,7 @@ class EditAbout(FlaskForm):
 class EditPostForm(FlaskForm):
     title = StringField("Title", validators=[Required()])
     categories = StringField("Category", validators=[Required(), Length(1, 64)])
-    nature = SelectField(u"目录", coerce=str)
+    nature = SelectField(u"type", coerce=str)
     about_this_article = PageDownField("About this article", validators=[Required()])
     body = PageDownField("WRITE", validators=[Required()])
     submit = SubmitField("Submit")
@@ -33,7 +33,7 @@ class EditPostForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super(EditPostForm, self).__init__(*args, **kwargs)
 
-        self.nature.choices = [("tecnology", u"技术"), ("life", u"生活")]
+        self.nature.choices = [("tecnology", "tec"), ("life", "life")]
 
 
 class LeaveMessageForm(FlaskForm):

@@ -14,7 +14,7 @@ from wtforms import TextField, HiddenField, ValidationError, RadioField,\
     BooleanField, SubmitField, IntegerField, FormField, validators
 from wtforms.validators import Required
 
-@main.route("/")
+@main.route("/", methods=["GET", "PSOT"])
 def index():
     all_category = Category.query.all()
     categories = Counter([item.category_name for item in all_category])
@@ -25,8 +25,11 @@ def index():
         error_out=False)
     posts = pagination.items
     return render_template("index.html", current_time=datetime.utcnow(),
-                           request=request, posts=posts, categories=categories,
-                           pagination=pagination, show="index", Category=Category)
+                           posts=posts,
+                           pagination=pagination,
+                           route="main.index",
+                           Category=Category,
+                           home=True)
 
 
 @main.route("/life")
@@ -41,7 +44,7 @@ def life():
     posts = pagination.items
     return render_template("index.html", current_time=datetime.utcnow(),
                            request=request, posts=posts, categories=categories,
-                           pagination=pagination, show="life", Category=Category)
+                           pagination=pagination, Category=Category, life=True)
 
 
 @main.route("/category/<categy>")
@@ -74,6 +77,7 @@ def new():
         post.timestamp = datetime.utcnow()
         post.author = current_user._get_current_object().id
         db.session.add(post)
+        db.session.commit()
         post_id = len(Post.query.all()) + 1
         categories = [item.strip() for item in form.categories.data.split(",")]
         for category in categories:
