@@ -1,7 +1,5 @@
 *~
 *.out
 *.pyc
+./migrations/
 config.py
-*.sqlite
-*.sqlite3
-migrations/
