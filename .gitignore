@@ -2,3 +2,4 @@
 *.out
 *.pyc
 /XBlog/*.pyc
+/*/*/*.pyc
