@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block page_content %}
+<div class="about">
+{{ about.body_html | safe }}
+{% if user.email == admin %}
+    <a href="{{ url_for("main.edabout") }}" class="btn btn-danger btn-about">编辑</a>
+{% endif %}
+</div>
+{% endblock %}
