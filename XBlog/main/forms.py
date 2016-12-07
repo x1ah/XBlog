@@ -33,17 +33,17 @@ class EditPostForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super(EditPostForm, self).__init__(*args, **kwargs)
 
-        self.nature.choices = [("tecnology", "tec"), ("life", "life")]
+        self.nature.choices = [("tecnology", u"技术"), ("life", u"生活")]
 
 
 class LeaveMessageForm(FlaskForm):
-    user_name = StringField("Your nick name:", validators=[
+    user_name = StringField(u"昵称(英文)*:", validators=[
         Required(),
         Length(1, 64), Regexp("^[A-Za-z][A-Za-z0-9_.]*$", 0,
                               "Usernames must have only letters, "
                               "numbers, dots or underscores")
     ])
-    user_email = StringField("Your email(not necessity)", validators=[Email()])
-    user_site = StringField("Your website", validators=[Length(1, 64), URL()])
-    body = PageDownField("Message", validators=[Required(), Length(1, 200)])
-    submit = SubmitField("Submit")
+    user_email = StringField(u"邮箱(非必须)", validators=[Email()])
+    user_site = StringField(u"您的主页(http://example.com)*", validators=[Length(1, 64), URL()])
+    body = PageDownField(u"您的留言*", validators=[Required(), Length(1, 200)])
+    submit = SubmitField(u"提交")

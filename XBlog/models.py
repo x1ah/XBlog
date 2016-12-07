@@ -120,7 +120,16 @@ class LevMessage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(64))
     user_email = db.Column(db.String(64))
+    timestamp = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
     user_site = db.Column(db.String(64))
+    message = db.Column(db.Text)
+    message_html = db.Column(db.Text)
+
+    @staticmethod
+    def on_changed_body(target, value, oldvalue, initiator):
+        target.message_html = markdown(value, output_format="html")
+
+db.event.listen(LevMessage.message, "set", LevMessage.on_changed_body)
 
 class AnonymousUser(AnonymousUserMixin):
     def is_administrator(self):

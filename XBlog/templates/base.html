@@ -13,6 +13,11 @@
         function side()
         {
             $(".button-collapse").sideNav();
+            $('.carousel.carousel-slider').carousel({full_width: true});
+            $(document).ready(function() {
+                $('select').material_select();
+                $('.tooltipped').tooltip({delay: 50});
+            });
         }
     </script>
 {% endblock %}
@@ -22,82 +27,86 @@
 {% endblock %}
 
 {% block navbar %}
-<nav class="nav-extended">
-<div class="nav-wrapper #616161 grey darken-2">
-    <a href="/" class="brand-logo">x1ah</a>
-    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-    <ul id="nav-mobile" class="right hide-on-med-and-down">
-    <li><a href="https://github.com/x1ah/XBlog">Fork me on GitHub</a></li>
-    <li><a href="#">留言板</a></li>
-    {% if current_user.email %}
-    <li><a href="/new">Write</a></li>
-    <li><a href="/logout">Log Out</a></li>
-    {% else %}
-    <li><a href="/login">Log In</a></li>
-    {% endif %}
-    </ul>
-    <ul class="side-nav" id="mobile-demo">
-    <li><a href="https://github.com/x1ah/XBlog">Fork me on GitHub</a></li>
-    <li><a href="#">留言板</a></li>
-    {% if current_user.email %}
-    <li><a href="/new">Write</a></li>
-    <li><a href="/logout">Log Out</a></li>
-    {% else %}
-    <li><a href="/login">Log In</a></li>
-    {% endif %}
-    </ul>
-
-    <ul class="tabs tabs-transparent">
-        <li class="tab"><a {% block home_active %}{% endblock %} onclick="javascript:location.href='/'">Home</a></li>
-        <li class="tab"><a {% block life_active %}{% endblock %} onclick="javascript:location.href='/life'">Life</a></li>
-        <li class="tab"><a {% block about_active %}{% endblock %} onclick="javascript:location.href='/about'">About</a></li>
-        <li class="tab"><a {% block tools_active %}{% endblock %} onclick="javascript:location.href='/tools'">Tools</a></li>
-    </ul>
-</div>
-</nav>
+<nav {% block navbar_style %}{% endblock %}>
+    <div class="nav-wrapper grey darken-3" id="top">
+      <a href="/" class="brand-logo">x1ah</a>
+      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="/about">About</a></li>
+        <li><a href="/life">Life</a></li>
+        <li><a href="/message_board">留言板</a></li>
+        <li><a href="http://github.com/x1ah">GitHub</a></li>
+        {% if current_user.email %}
+        <li><a href="/new">Write</a></li>
+        <li><a href="/logout">Log Out</a></li>
+        {% else %}
+        <li><a href="/login">Log In</a></li>
+        {% endif %}
+      </ul>
+      <ul class="side-nav" id="mobile-demo">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/life">Life</a></li>
+        <li><a href="/message_board">留言板</a></li>
+        {% if current_user.email %}
+        <li><a href="/new">Write</a></li>
+        <li><a href="/logout">Log Out</a></li>
+        {% else %}
+        <li><a href="/login">Log In</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+  {% block display %}{% endblock %}
 {% endblock %}
 
 
 {% block content %}
- <div class="fixed-action-btn horizontal click-to-toggle">
+ <div class="fixed-action-btn horizontal">
     <a class="btn-floating btn-large red">
       <i class="material-icons">menu</i>
     </a>
     <ul>
       <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
-      <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
-      <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
-      <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
-      <li>
-          <a class="waves-effect waves-light btn" href="#modal1">tags</a>
-      </li>
-
-  <!-- Modal Structure -->
-  <div id="modal1" class="modal bottom-sheet">
-    <div class="modal-content">
-        test
-    </div>
-  </div>
+      <li><a href="#top" class="btn-floating green"><i class="material-icons">publish</i></a></li>
     </ul>
   </div>
 
 <div class="container">
-    {% for message in get_flashed_messages() %}
-    <script>
-        $(document).ready(function(){
-            $('.tooltipped').tooltip({delay: 50});
-          });
-        Materialize.toast('{{ message }}', 3000, 'rounded');
-         Materialize.toast('I am a toast!', 4000);
-    </script>
-    <div class="chip">
-        {{ message }}
-        <i class="close material-icons">close</i>
-    </div>
-    {% endfor %}
     {% block page_content %}{% endblock %}
     {% block tags %}{% endblock %}
 </div>
+{% endblock %}
+
+{% block footer %}
+<footer class="page-footer grey darken-3">
+  <div class="container">
+    <div class="row">
+      <div class="col l6 s12">
+        <h5 class="white-text">Hello my world</h5>
+        <p class="grey-text text-lighten-4">Live free or die!<br/>Keep It Simple! Stupid!</p>
+      </div>
+      <div class="col l4 offset-l2 s12">
+        <h5 class="white-text">友情链接</h5>
+        <ul>
+          <li><a class="grey-text text-lighten-3" href="http://ajucs.com">Aju</a></li>
+          <li><a class="grey-text text-lighten-3" href="http://wuwenfu.cn">吴文付的博客</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    <div class="container">
+    © 2014 Copyright Text
+    <a class="grey-text text-lighten-4 right" href="http://github.com/x1ah/XBlog">Fork me on GitHub</a>
+    </div>
+  </div>
+</footer>
+{% for message in get_flashed_messages() %}
+<script>
+    Materialize.toast('{{ message }}', 3000, 'rounded');
+</script>
+{% endfor %}
 {% endblock %}
 
 {% block scripts %}

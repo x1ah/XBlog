@@ -1,25 +1,40 @@
 {% for post in posts %}
+{% set id = post.id %}
+{% set categories = Category.query.filter_by(posts=id) %}
   <div class="col s12 m12">
-    <div class="card grey darken-3">
-      <div class="card-content white-text">
-        <span class="card-title">{{ post.title }}</span>
-        <i class="small material-icons today"></i>
-        {% if post.about_this_article_html %}
-        <p>{{ post.about_this_article_html | safe }}</p>
-        {% else %}
-        {{ post.about_this_article }}
-        {% endif %}
-      </div>
+    <div class="card hoverable sticky-action">
+    <div class="card-content">
+      <a href="{{ url_for('main.post', pid=post.id) }}" class="card-title activator grey-text text-darken-3"><h4>{{ post.title }}</h4></a>
+      <span class="card-title activator grey-text text-darken-4"><i class="material-icons right">more_vert</i></span>
+      <div><p><i class="tiny material-icons" style="vertical-align: middle">today</i>{{ post.timestamp.strftime(format="%Y-%m-%d") }}</p></div>
+      <br/>
+      {% if post.about_this_article_html %}
+      <p>{{ post.about_this_article_html | safe }}</p>
+      {% else %}
+      {{ post.about_this_article }}
+      {% endif %}
     </div>
-  <a class='dropdown-button btn' href='#' data-activates='dropdown1'>Tags</a>
-  <a class="waves-effect waves-light btn right" href="{{ url_for('main.post', pid=post.id) }}">read more</a>
-  <!-- Dropdown Structure -->
-  <ul id='dropdown1' class='dropdown-content'>
-    {% for category in Category.query.filter_by(posts=post.id).all() %}
-    <li><a href="{{ url_for('main.category', categy=category.category_name) }}">{{ category.category_name }}</a></li>
-    <li class="divider"></li>
-    {% endfor %}
-  </ul>
+    <div class="card-action">
+      <a href="{{ url_for('main.post', pid=post.id) }}">Read More</a>
+    </div>
+    <div class="card-reveal">
+      <span class="card-title grey-text text-darken-4">标签<i class="material-icons right">close</i></span>
+        {% for category in categories %}
+        <!--<li class="collection-item dismissable"><div>{{ category.category_name }}<a href="{{ url_for('main.category', categy=category.category_name) }}" class="secondary-content"><i class="material-icons">send</i></a></div></li>-->
+        <a href="{{ url_for('main.category', categy=category.category_name) }}">
+        <div class="chip cyan accent-2">{{ category.category_name }}</div>
+        </a>
+        {% endfor %}
+
+        <span class="card-title grey-text text-darken-4">Root</span>
+        <a href="{{ url_for('main.delete', pid=post.id) }}">
+        <div class="chip red darken-1 white-text">删除</div>
+        </a>
+        <a href="{{ url_for('main.edit', pid=post.id) }}">
+        <div class="chip green accent-3 white-text">编辑</div>
+        </a>
+    </div>
   </div>
-  <div></div>
+  </div>
+
 {% endfor %}

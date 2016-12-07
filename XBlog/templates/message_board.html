@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}留言板{% endblock %}
+
+{% block page_content %}
+<div class="row">
+  <div class="col s12">
+    <div class="card hoverable">
+      <div class="card-content">
+      {{ wtf.quick_form(form) }}
+      </div>
+    </div>
+  </div>
+
+  {% for message in msg %}
+  <div class="col s12">
+    <div class="card hoverable">
+      <div class="card-content">
+        <h5><i class="small material-icons" style="vertical-align: middle">perm_identity</i><a href="{{ message.user_site }}">{{ message.user_name }}</a></h5>
+        <p><i class="tiny material-icons" style="vertical-align: middle">today</i>{{ message.timestamp.strftime(format="%Y-%m-%d") }}</p>
+        <br/>
+        {% if message.message_html %}
+        <p>{{ message.message_html | safe }}
+        {% else %}
+        <p>{{ message.message }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+</div>
+{{ macros.pagination_widget(pagination, "main.message_board") }}
+{% endblock %}

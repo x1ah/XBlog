@@ -3,9 +3,9 @@ from collections import Counter
 from flask import render_template, request, flash, redirect, url_for, current_app, abort
 from flask_login import login_required, current_user
 from . import main
-from ..models import Post, About, Category
+from ..models import Post, About, Category, LevMessage
 from .. import db
-from .forms import EditPostForm, EditAbout
+from .forms import EditPostForm, EditAbout, LeaveMessageForm
 
 # =========================
 from flask_wtf import FlaskForm, RecaptchaField
@@ -16,8 +16,6 @@ from wtforms.validators import Required
 
 @main.route("/", methods=["GET", "PSOT"])
 def index():
-    all_category = Category.query.all()
-    categories = Counter([item.category_name for item in all_category])
     page = request.args.get("page", 1, type=int)
     pagination = Post.query.filter_by(nature="tecnology").order_by(
         Post.timestamp.desc()).paginate(
@@ -27,9 +25,7 @@ def index():
     return render_template("index.html", current_time=datetime.utcnow(),
                            posts=posts,
                            pagination=pagination,
-                           route="main.index",
-                           Category=Category,
-                           home=True)
+                           Category=Category)
 
 
 @main.route("/life")
@@ -72,13 +68,14 @@ def new():
         post = Post()
         post.title = form.title.data
         post.nature = form.nature.data
+        post.categories = form.categories.data
         post.about_this_article = form.about_this_article.data
         post.body = form.body.data
         post.timestamp = datetime.utcnow()
         post.author = current_user._get_current_object().id
         db.session.add(post)
         db.session.commit()
-        post_id = len(Post.query.all()) + 1
+        post_id = len(Post.query.all())
         categories = [item.strip() for item in form.categories.data.split(",")]
         for category in categories:
             categy = Category()
@@ -173,46 +170,25 @@ def edabout():
     form.about.data = about.body
     return render_template("edit_about.html", form=form)
 
-# ==========================
-class TelephoneForm(FlaskForm):
-    country_code = IntegerField('Country Code', [validators.required()])
-    area_code = IntegerField('Area Code/Exchange', [validators.required()])
-    number = TextField('Number')
-
-class ExampleForm(FlaskForm):
-    field1 = TextField('First Field', description='This is field one.')
-    field2 = TextField('Second Field', description='This is field two.',
-                       validators=[Required()])
-    hidden_field = HiddenField('You cannot see this', description='Nope')
-    recaptcha = RecaptchaField('A sample recaptcha field')
-    radio_field = RadioField('This is a radio field', choices=[
-        ('head_radio', 'Head radio'),
-        ('radio_76fm', "Radio '76 FM"),
-        ('lips_106', 'Lips 106'),
-        ('wctr', 'WCTR'),
-    ])
-    checkbox_field = BooleanField('This is a checkbox',
-                                  description='Checkboxes can be tricky.')
-
-    # subforms
-    mobile_phone = FormField(TelephoneForm)
-
-    # you can change the label as well
-    office_phone = FormField(TelephoneForm, label='Your office phone')
-
-    ff = FileField('Sample upload')
-
-    submit_button = SubmitField('Submit Form')
-
-
-    def validate_hidden_field(form, field):
-        raise ValidationError('Always wrong')
-
 @main.route("/message_board", methods=["GET", "POST"])
 def message_board():
-    return None
-
-@main.route("/test")
-def tt():
-    form = ExampleForm()
-    return render_template("test.html", form=form)
+    form = LeaveMessageForm()
+    page = request.args.get("page", 1, type=int)
+    pagination = LevMessage.query.order_by(
+        LevMessage.timestamp.desc()).paginate(
+        page, per_page=current_app.config["LEVMEG_PER_PAGE"],
+        error_out=False)
+    msg = pagination.items
+    if form.validate_on_submit():
+        Message = LevMessage()
+        Message.user_name = form.user_name.data
+        Message.user_email = form.user_email.data
+        Message.user_site = form.user_site.data
+        Message.timestamp = datetime.utcnow()
+        Message.message = form.body.data
+        db.session.add(Message)
+        return redirect(url_for("main.message_board"))
+    return render_template("message_board.html",
+                           msg=msg,
+                           form=form,
+                           pagination=pagination)

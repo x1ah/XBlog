@@ -2,11 +2,45 @@
 
 {% block title %}About{% endblock %}
 
+{% block navbar_style %}
+style="margin-bottom:40px"
+{% endblock %}
+
 {% block page_content %}
-<div class="about">
-{{ about.body_html | safe }}
-{% if user.email == admin %}
-    <a href="{{ url_for("main.edabout") }}" class="btn btn-danger btn-about">编辑</a>
-{% endif %}
+<div class="row">
+    <div class="col s12">
+      <div class="card z-depth-5 white">
+        <div class="card-content">
+            {{ about.body_html | safe }}
+        </div>
+        {% if user.email == admin %}
+        <div class="card-action">
+        <a href="{{ url_for('main.edabout') }}" class="btn btn-danger">编辑</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col s12">
+        <div class="card hoverable">
+        <div class="card-content">
+            <!-- 多说评论框 start -->
+            <div class="ds-thread" data-thread-key="1" data-title="About" data-url="{{ url_for('main.about') }}"></div>
+            <!-- 多说评论框 end -->
+            <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+            <script type="text/javascript">
+            var duoshuoQuery = {short_name:"xiahei"};
+                (function() {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0] 
+                || document.getElementsByTagName('body')[0]).appendChild(ds);
+                })();
+                </script>
+            <!-- 多说公共JS代码 end -->
+        </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

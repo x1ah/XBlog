@@ -1,25 +1,28 @@
 {% extends "base.html" %}
 {% import "_macros.html" as macros %}
 
-{% block tags %}
-<!--
-            {% for category in categories %}
-            <span class="badge">{{ categories[category] }}</span>
-            <a href="{{ url_for('main.category', categy=category) }}" style="color: #337ab7">{{ category }}</a>
-            {% endfor %}
--->
-{% endblock %}
-
-{% block home_active %}
-{% if home %}
-class="active" 
-{% endif %}
-{% endblock %}
-
-{% block life_active %}
-{% if life %}
-class="active"
-{% endif %}
+{% block display %}
+ <div class="carousel carousel-slider center" data-indicators="true">
+    <div class="carousel-fixed-item center">
+      <a class="btn waves-effect white grey-text darken-text-2">button</a>
+    </div>
+    <div class="carousel-item red white-text" href="#one!">
+      <h2>First Panel</h2>
+      <p class="white-text">This is your first panel</p>
+    </div>
+    <div class="carousel-item amber white-text" href="#two!">
+      <h2>Second Panel</h2>
+      <p class="white-text">This is your second panel</p>
+    </div>
+    <div class="carousel-item green white-text" href="#three!">
+      <h2>Third Panel</h2>
+      <p class="white-text">This is your third panel</p>
+    </div>
+    <div class="carousel-item blue white-text" href="#four!">
+      <h2>Fourth Panel</h2>
+      <p class="white-text">This is your fourth panel</p>
+    </div>
+  </div>
 {% endblock %}
 
 {% block page_content %}
@@ -27,31 +30,4 @@ class="active"
     {% include "_index.html" %}
 </div>
     {{ macros.pagination_widget(pagination, "main.index") }}
-
-<!--<div class="page-header">
-    {% for post in posts %}<a href="{{ url_for('main.post', pid=post.id) }}" style="color: inherit">
-    <div class="jumbotron modal-content">
-        <h1><center>{{ post.title }}</center></h1>
-        <center><span class="glyphicon glyphicon-calendar">{{ post.timestamp.strftime(format="%Y-%m-%d") }}</span></center>
-        {% if post.about_this_article_html %}
-        {{ post.about_this_article_html | safe }}
-        {% else %}
-        {{ post.about_this_article }}
-        {% endif %}
-        <span class="glyphicon glyphicon-send" style="float: left"></span>
-        {% for category in Category.query.filter_by(posts=post.id).all() %}
-        <p><a href="{{ url_for('main.category', categy=category.category_name) }}" style="color: #337ab7;float:left">
-            <span class="label label-success">{{ category.category_name }}</span>
-        </a></p>
-        {% endfor %}
-        {% if current_user.email %}
-        <p><a href="{{ url_for('main.edit', pid=post.id) }}" class="btn btn-danger read-more">编辑</a></p>
-        <p><a href="{{ url_for('main.delete', pid=post.id) }}" class="btn btn-danger read-more">删除</a></p>
-        {% endif %}
-        <p><a href="{{ url_for('main.post', pid=post.id) }}" class="btn btn-danger read-more">阅读全文</a></p>
-    </div>
-    </a>
-    {% endfor %}
-</div>
--->
 {% endblock %}

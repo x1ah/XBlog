@@ -10,6 +10,7 @@ class Config:
     ADMIN_PASSWORD = "admin"
 
     POSTS_PER_PAGE = 5
+    LEVMEG_PER_PAGE = 20
 
     @staticmethod
     def init_app(app):

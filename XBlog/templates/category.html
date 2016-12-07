@@ -1,26 +1,10 @@
 {% extends "index.html" %}
 {% import "_macros.html" as macros %}
 
+{% block display %}{% endblock %}
+
 {% block page_content %}
-<div class="page-header">
-    {% for post in posts %}
-    <div class="jumbotron modal-content">
-        <h1>{{ post.title }}</h1>
-        <h6>{{ post.timestamp }}</h6>
-        {% if post.about_this_article_html %}
-        {{ post.about_this_article_html | safe }}
-        {% else %}
-        {{ post.about_this_article }}
-        {% endif %}
-        {% for category in Category.query.filter_by(posts=post.id) %}
-        <p><a href="{{ url_for('main.category', categy=category.category_name) }}" style="color: #337ab7;float:left"><span class="label label-success">{{ category.category_name }}</span>
-        </a></p>
-        {% endfor %}
-        <p><a href="{{ url_for('main.post', pid=post.id) }}" class="btn btn-danger read-more">阅读全文</a></p>
-    </div>
-    {% endfor %}
-    <div class="pagination">
-        {{ macros.pagination_widget(pagination, "main.index") }}
-    </div>
+<div class="row">
+{% include "_index.html" %}
 </div>
 {% endblock %}
