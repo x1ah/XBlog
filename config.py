@@ -1,6 +1,16 @@
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+try:
+    from wtforms.fields import HiddenField
+except ImportError:
+
+    def is_hidden_field_filter(field):
+        raise RuntimeError('WTForms is not installed.')
+else:
+
+    def is_hidden_field_filter(field):
+        return isinstance(field, HiddenField)
 
 class Config:
     SECRET_KEY = "x1ah"
@@ -14,7 +24,8 @@ class Config:
 
     @staticmethod
     def init_app(app):
-        pass
+        app.jinja_env.globals['material_is_hidden_field'] =\
+            is_hidden_field_filter
 
 
 class DevConfig(Config):

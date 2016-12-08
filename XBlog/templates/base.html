@@ -1,14 +1,8 @@
-{% extends "material/base.html" %}
+{% extends "bootstrap_to_material/base.html" %}
 
 {% block title %} x1ah's blog {% endblock %}
 
-{% block head %}
-{{ super() }}
-    <link rel="shortcut icon" href="{{ url_for("static", filename="favicon.ico") }}" type="image/x-icon">
-    <link rel="icon" href="{{ url_for("static", filename="favicon.ico") }}" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="{{ url_for("static", filename="css/materialize.min.css") }}" media="screen,projection"/>
-    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+{% block hscript %}
     <script>
         function side()
         {
@@ -22,13 +16,22 @@
     </script>
 {% endblock %}
 
+{% block head %}
+    {{ super() }}
+    <link rel="shortcut icon" href="{{ url_for("static", filename="favicon.ico") }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for("static", filename="favicon.ico") }}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="{{ url_for("static", filename="css/materialize.min.css") }}" media="screen,projection"/>
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+{% endblock %}
+
 {% block body_attribs %}
     onload="side();"
 {% endblock %}
 
 {% block navbar %}
 <nav {% block navbar_style %}{% endblock %}>
-    <div class="nav-wrapper grey darken-3" id="top">
+    <div class="nav-wrapper grey darken-3">
       <a href="/" class="brand-logo">x1ah</a>
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
@@ -68,14 +71,14 @@
     </a>
     <ul>
       <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
-      <li><a href="#top" class="btn-floating green"><i class="material-icons">publish</i></a></li>
+      <li><a href="javascript:scroll(0, 0)" class="btn-floating green"><i class="material-icons">publish</i></a></li>
     </ul>
   </div>
 
-<div class="container">
-    {% block page_content %}{% endblock %}
-    {% block tags %}{% endblock %}
-</div>
+    <div class="container">
+        {% block page_content %}{% endblock %}
+        {% block tags %}{% endblock %}
+    </div>
 {% endblock %}
 
 {% block footer %}
@@ -97,7 +100,7 @@
   </div>
   <div class="footer-copyright">
     <div class="container">
-    © 2014 Copyright Text
+    © 2016 Copyright Text
     <a class="grey-text text-lighten-4 right" href="http://github.com/x1ah/XBlog">Fork me on GitHub</a>
     </div>
   </div>
@@ -110,7 +113,11 @@
 {% endblock %}
 
 {% block scripts %}
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script
+        src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous">
+    </script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
 
     {{ moment.include_moment() }}

@@ -20,12 +20,12 @@
     <div class="card-reveal">
       <span class="card-title grey-text text-darken-4">标签<i class="material-icons right">close</i></span>
         {% for category in categories %}
-        <!--<li class="collection-item dismissable"><div>{{ category.category_name }}<a href="{{ url_for('main.category', categy=category.category_name) }}" class="secondary-content"><i class="material-icons">send</i></a></div></li>-->
         <a href="{{ url_for('main.category', categy=category.category_name) }}">
         <div class="chip cyan accent-2">{{ category.category_name }}</div>
         </a>
         {% endfor %}
 
+        {% if IS_ADMIN %}
         <span class="card-title grey-text text-darken-4">Root</span>
         <a href="{{ url_for('main.delete', pid=post.id) }}">
         <div class="chip red darken-1 white-text">删除</div>
@@ -33,6 +33,7 @@
         <a href="{{ url_for('main.edit', pid=post.id) }}">
         <div class="chip green accent-3 white-text">编辑</div>
         </a>
+        {% endif %}
     </div>
   </div>
   </div>

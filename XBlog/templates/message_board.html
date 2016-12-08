@@ -1,11 +1,38 @@
 {% extends "base.html" %}
 {% import "_macros.html" as macros %}
-{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap_to_material/wtf.html" as wtf %}
 
 {% block title %}留言板{% endblock %}
 
+{% block navbar_style %}
+style="margin-bottom:40px"
+{% endblock %}
+
 {% block page_content %}
 <div class="row">
+    <div class="col s12">
+        <div class="card hoverable">
+        <div class="card-content">
+            <!-- 多说评论框 start -->
+            <div class="ds-thread" data-thread-key="2" data-title="message_board" data-url="{{ url_for('main.message_board') }}"></div>
+            <!-- 多说评论框 end -->
+            <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+            <script type="text/javascript">
+            var duoshuoQuery = {short_name:"xiahei"};
+                (function() {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0] 
+                || document.getElementsByTagName('body')[0]).appendChild(ds);
+                })();
+                </script>
+            <!-- 多说公共JS代码 end -->
+        </div>
+        </div>
+    </div>
+        <!--
   <div class="col s12">
     <div class="card hoverable">
       <div class="card-content">
@@ -31,6 +58,7 @@
   </div>
 
   {% endfor %}
-</div>
 {{ macros.pagination_widget(pagination, "main.message_board") }}
+        -->
+</div>
 {% endblock %}

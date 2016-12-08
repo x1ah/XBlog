@@ -7,12 +7,6 @@ from ..models import Post, About, Category, LevMessage
 from .. import db
 from .forms import EditPostForm, EditAbout, LeaveMessageForm
 
-# =========================
-from flask_wtf import FlaskForm, RecaptchaField
-from flask_wtf.file import FileField
-from wtforms import TextField, HiddenField, ValidationError, RadioField,\
-    BooleanField, SubmitField, IntegerField, FormField, validators
-from wtforms.validators import Required
 
 @main.route("/", methods=["GET", "PSOT"])
 def index():
@@ -22,25 +16,33 @@ def index():
         page, per_page=current_app.config["POSTS_PER_PAGE"],
         error_out=False)
     posts = pagination.items
-    return render_template("index.html", current_time=datetime.utcnow(),
+    IS_ADMIN = ((not current_user.is_anonymous)
+                and current_user.email == current_app.config.get("ADMIN"))
+    return render_template("index.html",
                            posts=posts,
+                           IS_ADMIN=IS_ADMIN,
                            pagination=pagination,
+                           current_time=datetime.utcnow(),
                            Category=Category)
 
 
 @main.route("/life")
 def life():
-    all_category = Category.query.all()
-    categories = Counter([item.category_name for item in all_category])
+    IS_ADMIN = ((not current_user.is_anonymous)
+                and current_user.email == current_app.config.get("ADMIN"))
     page = request.args.get("page", 1, type=int)
     pagination = Post.query.filter_by(nature="life").order_by(
         Post.timestamp.desc()).paginate(
         page, per_page=current_app.config["POSTS_PER_PAGE"],
         error_out=False)
     posts = pagination.items
-    return render_template("index.html", current_time=datetime.utcnow(),
-                           request=request, posts=posts, categories=categories,
-                           pagination=pagination, Category=Category, life=True)
+    return render_template("index.html",
+                           posts=posts,
+                           IS_ADMIN=IS_ADMIN,
+                           Category=Category,
+                           pagination=pagination,
+                           current_time=datetime.utcnow(),
+                           )
 
 
 @main.route("/category/<categy>")
@@ -68,15 +70,15 @@ def new():
         post = Post()
         post.title = form.title.data
         post.nature = form.nature.data
-        post.categories = form.categories.data
+        post.categories = categoriy_string = form.categories.data
         post.about_this_article = form.about_this_article.data
         post.body = form.body.data
         post.timestamp = datetime.utcnow()
         post.author = current_user._get_current_object().id
         db.session.add(post)
         db.session.commit()
-        post_id = len(Post.query.all())
-        categories = [item.strip() for item in form.categories.data.split(",")]
+        post_id = post.id
+        categories = [item.strip() for item in categoriy_string.split(",")]
         for category in categories:
             categy = Category()
             categy.category_name = category
@@ -115,7 +117,9 @@ def post(pid):
 @main.route("/about")
 def about():
     about_me = About.query.first()
-    return render_template("about.html", about=about_me, user=current_user,
+    return render_template("about.html",
+                           about=about_me,
+                           user=current_user,
                            admin=current_app.config.get("ADMIN"))
 
 
