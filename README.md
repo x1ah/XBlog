@@ -26,7 +26,7 @@ $ python manage.py shell
 >>> exit()
 # default admin count: x1ahgxq@gmail.com
 # default admin password: admin
-# you can reivse it in config.py but it will be replace by environment variable
+# you can revise it in ./config.py but it will be replace by environment variable
 
 $ python manage.py runserver
 # open "http://localhost:5000"
