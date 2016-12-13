@@ -16,6 +16,7 @@
     </script>
 {% endblock %}
 
+
 {% block head %}
     {{ super() }}
     <link rel="shortcut icon" href="{{ url_for("static", filename="favicon.ico") }}" type="image/x-icon">
@@ -29,9 +30,29 @@
     onload="side();"
 {% endblock %}
 
+{% block body_style %}
+style="
+    background-image:url('https://static.v2ex.com/tiles/idev.png');
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;"
+{% endblock %}
+
 {% block navbar %}
+<div class="fixed-action-btn horizontal">
+   <a class="btn-floating btn-large red">
+      <i class="material-icons">menu</i>
+   </a>
+   <ul>
+      <li><a class="btn-floating red button-collapse" data-activates="mobile-demo"><i class="material-icons">menu</i></a></li>
+      <li><a href="javascript:scroll(0, 0)" class="btn-floating green"><i class="material-icons">publish</i></a></li>
+   </ul>
+</div>
+
 <nav {% block navbar_style %}{% endblock %}>
     <div class="nav-wrapper grey darken-3">
+    <div class="container">
       <a href="/" class="brand-logo">x1ah</a>
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
@@ -60,22 +81,12 @@
         {% endif %}
       </ul>
     </div>
+    </div>
   </nav>
-  {% block display %}{% endblock %}
 {% endblock %}
 
 
 {% block content %}
- <div class="fixed-action-btn horizontal">
-    <a class="btn-floating btn-large red">
-      <i class="material-icons">menu</i>
-    </a>
-    <ul>
-      <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
-      <li><a href="javascript:scroll(0, 0)" class="btn-floating green"><i class="material-icons">publish</i></a></li>
-    </ul>
-  </div>
-
     <div class="container">
         {% block page_content %}{% endblock %}
         {% block tags %}{% endblock %}
