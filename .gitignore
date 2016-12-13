@@ -1,5 +1,6 @@
 *~
 *.out
 *.pyc
+*.python-version
 migrations/
 venv/
