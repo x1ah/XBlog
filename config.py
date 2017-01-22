@@ -12,6 +12,7 @@ else:
     def is_hidden_field_filter(field):
         return isinstance(field, HiddenField)
 
+
 class Config:
     SECRET_KEY = "x1ah"
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
