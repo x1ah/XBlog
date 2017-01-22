@@ -7,18 +7,18 @@ from flask_mail import Mail
 from flask_login import LoginManager
 from flask_pagedown import PageDown
 from flask_sqlalchemy import SQLAlchemy, SignallingSession
-from flask_material import Material
 
 from config import config
+
 
 class NewSQLAlchemy(SQLAlchemy):
     def create_session(self, options):
         options["autoflush"] = False
         return SignallingSession(self, **options)
 
+
 mail = Mail()
 moment = Moment()
-material = Material()
 db = NewSQLAlchemy()
 login_manager = LoginManager()
 pagedown = PageDown()
@@ -31,7 +31,6 @@ def create_app(config_name):
     app.config.from_object(config[config_name])
 
     config[config_name].init_app(app)
-    material.init_app(app)
     mail.init_app(app)
     moment.init_app(app)
     db.init_app(app)

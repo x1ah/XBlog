@@ -15,7 +15,7 @@
 
     {%- endblock head %}
   </head>
-  <body{% block body_attribs %}{% endblock body_attribs %}>
+  <body{% block body_attribs -%}{%- endblock body_attribs %} {% block body_style -%}{%- endblock body_style %}>
     {% block body -%}
     {% block navbar %}
     {%- endblock navbar %}
